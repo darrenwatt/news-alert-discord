@@ -24,6 +24,12 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.env
+.venv
+.vscode/
+virtualenv/
+*.code-workspace
+.idea/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
