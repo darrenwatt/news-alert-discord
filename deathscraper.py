@@ -95,11 +95,11 @@ def update_stories_in_db(stories_list):
         # print("checking if already reported")
         headline = story['headline']
         already_there_headlines = stories_collection.count_documents({"headline": headline})
-        # check for image to remove reposts
-        img = story['img']
-        already_there_img = stories_collection.count_documents({"img": img})
+        # check for url to remove reposts
+        img = story['url']
+        already_there_url = stories_collection.count_documents({"url": url})
         # print(already_there_check)
-        already_there_check = already_there_headlines + already_there_img
+        already_there_check = already_there_headlines + already_there_url
         if already_there_check == 0:
             print("Adding story to database collection")
             insert_result = stories_collection.insert_one(story)
