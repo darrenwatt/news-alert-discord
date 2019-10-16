@@ -154,7 +154,7 @@ def main():
 
         # loop delay, 5 mins
         print("Waiting for next run.")
-        time.sleep(60)
+        time.sleep(300)
 
 
 main()
