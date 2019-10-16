@@ -96,7 +96,7 @@ def update_stories_in_db(stories_list):
         headline = story['headline']
         already_there_headlines = stories_collection.count_documents({"headline": headline})
         # check for url to remove reposts
-        img = story['url']
+        url = story['url']
         already_there_url = stories_collection.count_documents({"url": url})
         # print(already_there_check)
         already_there_check = already_there_headlines + already_there_url
