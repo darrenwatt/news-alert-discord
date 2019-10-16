@@ -102,10 +102,11 @@ def update_stories_in_db(stories_list):
         already_there_check = already_there_headlines + already_there_url
         if already_there_check == 0:
             print("Adding story to database collection")
+            story['timestamp'] = time.time()
             insert_result = stories_collection.insert_one(story)
             if insert_result.acknowledged:
                 if notify:
-                    do_discord_notification(story)
+                    do_discord_notification_2(story)
         else:
             print("No new stories to add.")
 
@@ -141,6 +142,60 @@ def do_discord_notification(story):
 
 #    webhook.send(embed_notif, username='test')
     print("Done a discord notification.")
+
+
+def do_discord_notification_2(story):
+    print("Doing a discord notification...")
+    print(story)
+
+    embed_headline = story['headline']
+    embed_url = story['url']
+
+    # check optional bits
+    if 'summary' in story:
+        embed_summary = story['summary']
+    else:
+        embed_summary = " "
+
+    if 'img' in story:
+        embed_image = story['img']
+    else:
+        embed_image = " "
+
+    url = webhook_url
+    data = {}
+    data["content"] = "They be dead!"
+    data["username"] = "Death Bot 3000"
+
+    # for all params, see https://discordapp.com/developers/docs/resources/channel#embed-object
+    embed = []
+    embed["description"] = "text in embed"
+    embed["title"] = "embed title"
+    # embed["url"] = "https://www.bbc.co.uk/news"+embed_url
+    # embed["image"] = embed_image
+    # embed["footer"] = "https://www.bbc.co.uk/news"+embed_url
+    data["embeds"].append(embed)
+
+    result = requests.post(url, data=json.dumps(data), headers={"Content-Type": "application/json"})
+
+    try:
+        result.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        print(err)
+    else:
+        print("Notification delivered successfully, code {}.".format(result.status_code))
+
+    print("Done a discord notification.")
+
+
+'''
+    webhook = DiscordWebhook(url=webhook_url)
+    embed = DiscordEmbed(title=embed_headline, description=embed_summary, color=242424)
+    embed.set_image(url=embed_image)
+    embed.set_footer(text="https://www.bbc.co.uk/news"+embed_url, url="https://www.bbc.co.uk/news"+embed_url)
+    webhook.add_embed(embed)
+    webhook.execute()
+'''
 
 
 def main():
