@@ -13,6 +13,8 @@ db_pass = ""
 
 #discord stuff
 webhook_url = ""
+
+notify = True/False
 ```
 
 Running in Heroku notes:

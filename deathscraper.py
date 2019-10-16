@@ -27,6 +27,8 @@ db_pass = os.getenv("db_pass")
 
 webhook_url = os.getenv("webhook_url")
 
+notify = os.getenv("notify")
+
 client = pymongo.MongoClient(db_host, db_port, retryWrites=False)
 database = client[db_name]
 database.authenticate(db_user, db_pass)
@@ -97,7 +99,8 @@ def update_stories_in_db(stories_list):
             print("Adding story to database collection")
             insert_result = stories_collection.insert_one(story)
             if insert_result.acknowledged:
-                do_discord_notification(story)
+                if notify:
+                    do_discord_notification(story)
         else:
             print("No new stories to add.")
 
