@@ -41,7 +41,12 @@ imgwidth = "420"
 def scrape_bbc_news():
     print("Getting stories featuring the words:")
     print(*searchterms)
-    response = requests.get('https://www.bbc.co.uk/news')
+    try:
+        response = requests.get('https://www.bbc.co.uk/news')
+    except requests.exceptions.RequestException as e:
+        print(e)
+        print("Never mind... we'll try again in a bit.")
+        return
     doc = BeautifulSoup(response.text, 'html.parser')
 
     # Start with an empty list
@@ -144,11 +149,12 @@ def main():
         get_stories_list = scrape_bbc_news()
 
         # chuck results in db
-        update_stories_in_db(get_stories_list)
+        if get_stories_list:
+            update_stories_in_db(get_stories_list)
 
         # loop delay, 5 mins
         print("Waiting for next run.")
-        time.sleep(300)
+        time.sleep(60)
 
 
 main()
