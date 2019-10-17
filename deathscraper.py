@@ -4,7 +4,8 @@ import pymongo
 from bs4 import BeautifulSoup
 from discord import Webhook, RequestsWebhookAdapter
 from dotenv import load_dotenv
-from discord_webhook import DiscordWebhook, DiscordEmbed
+# from discord_webhook import DiscordWebhook, DiscordEmbed
+# import discord
 import json
 import re
 import os
@@ -106,7 +107,7 @@ def update_stories_in_db(stories_list):
             insert_result = stories_collection.insert_one(story)
             if insert_result.acknowledged:
                 if notify:
-                    do_discord_notification_2(story)
+                    do_discord_notification(story)
         else:
             print("No new stories to add.")
 
@@ -116,40 +117,7 @@ def do_discord_notification(story):
     print(story)
 
     embed_headline = story['headline']
-    embed_url = story['url']
-
-    if 'summary' in story:
-        embed_summary = story['summary']
-    else:
-        embed_summary = " "
-
-    if 'img' in story:
-        embed_image = story['img']
-    else:
-        embed_image = " "
-
-    webhook = DiscordWebhook(url=webhook_url)
-
-    embed = DiscordEmbed(title=embed_headline, description=embed_summary, color=242424)
-
-    embed.set_image(url=embed_image)
-
-    embed.set_footer(text="https://www.bbc.co.uk/news"+embed_url, url="https://www.bbc.co.uk/news"+embed_url)
-
-    webhook.add_embed(embed)
-
-    webhook.execute()
-
-#    webhook.send(embed_notif, username='test')
-    print("Done a discord notification.")
-
-
-def do_discord_notification_2(story):
-    print("Doing a discord notification...")
-    print(story)
-
-    embed_headline = story['headline']
-    embed_url = story['url']
+    embed_url = "https://www.bbc.co.uk/news"+story['url']
 
     # check optional bits
     if 'summary' in story:
@@ -163,17 +131,13 @@ def do_discord_notification_2(story):
         embed_image = " "
 
     url = webhook_url
-    data = {}
-    data["content"] = "They be dead!"
-    data["username"] = "Death Bot 3000"
+    data = {"content": "They be dead!", "username": "Death Bot 3000", "embeds": []}
 
-    # for all params, see https://discordapp.com/developers/docs/resources/channel#embed-object
-    embed = []
-    embed["description"] = "text in embed"
-    embed["title"] = "embed title"
-    # embed["url"] = "https://www.bbc.co.uk/news"+embed_url
-    # embed["image"] = embed_image
-    # embed["footer"] = "https://www.bbc.co.uk/news"+embed_url
+    embed = {"description": embed_summary,
+             "title": embed_headline,
+             "url": embed_url,
+             "image": {'url': embed_image},
+             "footer": {'text': embed_url}}
     data["embeds"].append(embed)
 
     result = requests.post(url, data=json.dumps(data), headers={"Content-Type": "application/json"})
@@ -185,17 +149,7 @@ def do_discord_notification_2(story):
     else:
         print("Notification delivered successfully, code {}.".format(result.status_code))
 
-    print("Done a discord notification.")
-
-
-'''
-    webhook = DiscordWebhook(url=webhook_url)
-    embed = DiscordEmbed(title=embed_headline, description=embed_summary, color=242424)
-    embed.set_image(url=embed_image)
-    embed.set_footer(text="https://www.bbc.co.uk/news"+embed_url, url="https://www.bbc.co.uk/news"+embed_url)
-    webhook.add_embed(embed)
-    webhook.execute()
-'''
+    print("Done a discord notification:"+embed)
 
 
 def main():
