@@ -4,7 +4,8 @@ import pymongo
 from bs4 import BeautifulSoup
 from discord import Webhook, RequestsWebhookAdapter
 from dotenv import load_dotenv
-from discord_webhook import DiscordWebhook, DiscordEmbed
+# from discord_webhook import DiscordWebhook, DiscordEmbed
+# import discord
 import json
 import re
 import os
@@ -99,6 +100,7 @@ def update_stories_in_db(stories_list):
         already_there_url = stories_collection.count_documents({"url": url})
         if already_there_url == 0:
             print("Adding story to database collection")
+            story['timestamp'] = time.time()
             insert_result = stories_collection.insert_one(story)
             if insert_result.acknowledged:
                 if notify:
@@ -112,8 +114,9 @@ def do_discord_notification(story):
     print(story)
 
     embed_headline = story['headline']
-    embed_url = story['url']
+    embed_url = "https://www.bbc.co.uk/news"+story['url']
 
+    # check optional bits
     if 'summary' in story:
         embed_summary = story['summary']
     else:
@@ -124,20 +127,26 @@ def do_discord_notification(story):
     else:
         embed_image = " "
 
-    webhook = DiscordWebhook(url=webhook_url)
+    url = webhook_url
+    data = {"content": "They be dead!", "username": "Death Bot 3000", "embeds": []}
 
-    embed = DiscordEmbed(title=embed_headline, description=embed_summary, color=242424)
+    embed = {"description": embed_summary,
+             "title": embed_headline,
+             "url": embed_url,
+             "image": {'url': embed_image},
+             "footer": {'text': embed_url}}
+    data["embeds"].append(embed)
 
-    embed.set_image(url=embed_image)
+    result = requests.post(url, data=json.dumps(data), headers={"Content-Type": "application/json"})
 
-    embed.set_footer(text="https://www.bbc.co.uk/news"+embed_url, url="https://www.bbc.co.uk/news"+embed_url)
+    try:
+        result.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        print(err)
+    else:
+        print("Notification delivered successfully, code {}.".format(result.status_code))
 
-    webhook.add_embed(embed)
-
-    webhook.execute()
-
-#    webhook.send(embed_notif, username='test')
-    print("Done a discord notification.")
+    print("Done a discord notification:")
 
 
 def main():
