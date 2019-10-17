@@ -149,7 +149,7 @@ def do_discord_notification(story):
     else:
         print("Notification delivered successfully, code {}.".format(result.status_code))
 
-    print("Done a discord notification:"+embed)
+    print("Done a discord notification:")
 
 
 def main():
