@@ -2,10 +2,7 @@ import requests
 import time
 import pymongo
 from bs4 import BeautifulSoup
-from discord import Webhook, RequestsWebhookAdapter
 from dotenv import load_dotenv
-# from discord_webhook import DiscordWebhook, DiscordEmbed
-# import discord
 import json
 import re
 import os
