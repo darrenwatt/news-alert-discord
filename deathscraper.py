@@ -93,14 +93,11 @@ def update_stories_in_db(stories_list):
         # print("working on story: ")
         # print(story)
         # print("checking if already reported")
-        headline = story['headline']
-        already_there_headlines = stories_collection.count_documents({"headline": headline})
+
         # check for url to remove reposts
         url = story['url']
         already_there_url = stories_collection.count_documents({"url": url})
-        # print(already_there_check)
-        already_there_check = already_there_headlines + already_there_url
-        if already_there_check == 0:
+        if already_there_url == 0:
             print("Adding story to database collection")
             insert_result = stories_collection.insert_one(story)
             if insert_result.acknowledged:
