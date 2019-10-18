@@ -111,7 +111,7 @@ def do_discord_notification(story):
     print(story)
 
     embed_headline = story['headline']
-    embed_url = "https://www.bbc.co.uk/news"+story['url']
+    embed_url = "https://www.bbc.co.uk"+story['url']
 
     # check optional bits
     if 'summary' in story:
