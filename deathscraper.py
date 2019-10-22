@@ -28,7 +28,7 @@ webhook_url = os.getenv("webhook_url")
 notify = os.getenv("notify", True)
 print("notify is set to {}".format(notify))
 
-loop_timer = os.getenv("loop_timer",300)
+loop_timer = int(os.getenv("loop_timer",300))
 print("loop_timer is set to {}".format(loop_timer))
 
 # from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
