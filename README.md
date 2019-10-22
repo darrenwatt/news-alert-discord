@@ -14,7 +14,8 @@ db_pass = ""
 #discord stuff
 webhook_url = ""
 
-notify = True/False
+notify = True/False (default True)
+loop_timer = integer (default 300)
 ```
 
 Running in Heroku notes:

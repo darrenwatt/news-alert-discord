@@ -25,7 +25,7 @@ db_pass = os.getenv("db_pass")
 
 webhook_url = os.getenv("webhook_url")
 
-notify = os.getenv("notify")
+notify = os.getenv("notify", True)
 print("notify is set to {}".format(notify))
 
 loop_timer = os.getenv("loop_timer",300)
