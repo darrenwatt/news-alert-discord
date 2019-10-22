@@ -26,6 +26,10 @@ db_pass = os.getenv("db_pass")
 webhook_url = os.getenv("webhook_url")
 
 notify = os.getenv("notify")
+print("notify is set to {}".format(notify))
+
+loop_timer = os.getenv("loop_timer",300)
+print("loop_timer is set to {}".format(loop_timer))
 
 # from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
 imgwidth = os.getenv("imgwidth", "420")    
@@ -56,7 +60,6 @@ def scrape_bbc_news():
         story_dict = {}
         headline = story.find('h3')
         # print(headline.text.lower())
-        # if any(term in headline.text.lower() for term in searchterms):
         for keyword in headline:
             if reg.search(keyword):
                 print("match found")
@@ -101,7 +104,7 @@ def update_stories_in_db(stories_list):
             story['timestamp'] = time.time()
             insert_result = stories_collection.insert_one(story)
             if insert_result.acknowledged:
-                if notify:
+                if notify==True:
                     do_discord_notification(story)
         else:
             print("No new stories to add.")
@@ -158,7 +161,7 @@ def main():
 
         # loop delay, 5 mins
         print("Waiting for next run.")
-        time.sleep(300)
+        time.sleep(loop_timer)
 
 
 main()
