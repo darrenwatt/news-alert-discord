@@ -27,13 +27,14 @@ webhook_url = os.getenv("webhook_url")
 
 notify = os.getenv("notify")
 
+# from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
+imgwidth = os.getenv("imgwidth", "420")    
+
 client = pymongo.MongoClient(db_host, db_port, retryWrites=False)
 database = client[db_name]
 database.authenticate(db_user, db_pass)
 
 stories_collection = database['stories']
-# from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
-imgwidth = "420"
 
 
 def scrape_bbc_news():
