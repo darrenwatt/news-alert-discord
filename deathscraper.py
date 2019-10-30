@@ -28,8 +28,11 @@ webhook_url = os.getenv("webhook_url")
 notify = os.getenv("notify", True)
 print("notify is set to {}".format(notify))
 
-loop_timer = int(os.getenv("loop_timer",300))
+loop_timer = int(os.getenv("loop_timer", 300))
 print("loop_timer is set to {}".format(loop_timer))
+
+news_url = os.getenv("news_url", 'https://www.bbc.co.uk/news')
+print("news_url is set to {}".format(news_url))
 
 # from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
 imgwidth = os.getenv("imgwidth", "420")    
@@ -45,7 +48,7 @@ def scrape_bbc_news():
     print("Getting stories featuring the words:")
     print(*searchterms)
     try:
-        response = requests.get('https://www.bbc.co.uk/news')
+        response = requests.get(news_url)
     except requests.exceptions.RequestException as e:
         print(e)
         print("Never mind... we'll try again in a bit.")
