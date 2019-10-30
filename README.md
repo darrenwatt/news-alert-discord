@@ -16,6 +16,7 @@ webhook_url = ""
 
 notify = True/False (default True)
 loop_timer = integer (default 300)
+news_url = "https://www.bbc.co.uk/news/entertainment_and_arts" (default https://www.bbc.co.uk/news)
 ```
 
 Running in Heroku notes:
