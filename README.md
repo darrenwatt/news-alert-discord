@@ -19,7 +19,35 @@ loop_timer = integer (default 300)
 news_url = "https://www.bbc.co.uk/news/entertainment_and_arts" (default https://www.bbc.co.uk/news)
 ```
 
-Running in Heroku notes:
+Docker Image
+====
+
+https://cloud.docker.com/repository/docker/darrenwatt/deathscraper
+
+To run locally:
+```
+$ docker run -it --name deathscraper -v "$PWD/.env:/.env" darren/deathscraper
+```
+To run from docker-compose, in your docker-compose.yml
+```
+services:
+
+  deathscraper:
+
+    image: darrenwatt/deathscraper:latest
+
+    container_name: deathscraper
+
+    volumes:
+
+     - ${USERDIR}/docker/deathscraper/.env:/.env
+```
+Then run with:
+```
+$ docker-compose -f ~/docker/docker-compose.yml up -d
+```
+
+Running in Heroku notes (untested:
 ```
 git push heroku master
 heroku ps:scale worker=1
