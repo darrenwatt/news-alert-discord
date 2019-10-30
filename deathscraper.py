@@ -107,7 +107,7 @@ def update_stories_in_db(stories_list):
             story['timestamp'] = time.time()
             insert_result = stories_collection.insert_one(story)
             if insert_result.acknowledged:
-                if notify==True:
+                if notify == "True":
                     do_discord_notification(story)
         else:
             print("No new stories to add.")
