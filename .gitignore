@@ -30,6 +30,7 @@ MANIFEST
 virtualenv/
 *.code-workspace
 .idea/
+config.ini
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

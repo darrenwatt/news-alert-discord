@@ -1,0 +1,11 @@
+# update and rename this file to .env
+
+# database stuff
+db_name = "testdb"
+db_host = "ds33333.mlab.com"
+db_port = 33333
+db_user = "derek"
+db_pass = "clive"
+
+# discord stuff
+webhook_url = "https://discordapp.com/api/webhooks/985347856239875465/G76IWCyhlLxTXt75TkLBbd8RlwZ_ou7C_vn4YG9M0xns5gKQX-Lu7_cUP2BUeFJEIz"

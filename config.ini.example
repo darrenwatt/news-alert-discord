@@ -1,0 +1,15 @@
+[general]
+notify = True
+loop_timer = 301
+
+# change this if you want a specific section
+news_url = https://www.bbc.co.uk/news/
+
+# from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
+imgwidth = 420
+
+searchterms = ["brexit","election"]
+
+# discord notification
+content = "This is news!"
+username = "Mainstream News Bot"

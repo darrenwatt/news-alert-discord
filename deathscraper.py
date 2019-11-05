@@ -6,14 +6,26 @@ from dotenv import load_dotenv
 import json
 import re
 import os
+from configparser import ConfigParser
 
 msg = "Yoyoyo, starting up in the house!"
 print(msg)
 
-# import secret stuff
+config = ConfigParser()
+print(config.read('config.ini'))
+
+print("Loading configuration")
+notify = config.getboolean('general', 'notify', fallback=False)
+loop_timer = config.getint('general', 'loop_timer', fallback=300)
+news_url = config.get('general', 'news_url', fallback='https://www.bbc.co.uk/news')
+imgwidth = config.get('general', 'imgwidth', fallback="420")
+searchterms = json.loads(config.get('general', 'searchterms', fallback="boris"))
+content = config.get('general', 'content', fallback="This is an update ...")
+username = config.get('general', 'username', fallback="News Update Bot")
+
+# import secret stuff, mongo config and discord webhook
 load_dotenv()
 
-searchterms = ["dead", "dies"]
 reg = re.compile(r'(?i)\b(?:%s)\b' % '|'.join(searchterms))
 
 # database stuff
@@ -25,17 +37,15 @@ db_pass = os.getenv("db_pass")
 
 webhook_url = os.getenv("webhook_url")
 
-notify = os.getenv("notify", True)
 print("notify is set to {}".format(notify))
-
-loop_timer = int(os.getenv("loop_timer", 300))
 print("loop_timer is set to {}".format(loop_timer))
-
-news_url = os.getenv("news_url", 'https://www.bbc.co.uk/news')
 print("news_url is set to {}".format(news_url))
+print("imgwidth is set to {}".format(imgwidth))
+print("content is set to {}".format(content))
+print("username is set to {}".format(username))
 
-# from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
-imgwidth = os.getenv("imgwidth", "420")    
+print("searchterms are:")
+print(*searchterms)
 
 client = pymongo.MongoClient(db_host, db_port, retryWrites=False)
 database = client[db_name]
@@ -45,13 +55,12 @@ stories_collection = database['stories']
 
 
 def scrape_bbc_news():
-    print("Getting stories featuring the words:")
-    print(*searchterms)
+    print("Getting stories now.")
     try:
         response = requests.get(news_url)
     except requests.exceptions.RequestException as e:
         print(e)
-        print("Never mind... we'll try again in a bit.")
+        print("Failed. Never mind... we'll try again in a bit.")
         return
     doc = BeautifulSoup(response.text, 'html.parser')
 
@@ -107,10 +116,10 @@ def update_stories_in_db(stories_list):
             story['timestamp'] = time.time()
             insert_result = stories_collection.insert_one(story)
             if insert_result.acknowledged:
-                if notify == "True":
+                if notify:
                     do_discord_notification(story)
         else:
-            print("No new stories to add.")
+            print("Story already in DB.")
 
 
 def do_discord_notification(story):
@@ -118,7 +127,7 @@ def do_discord_notification(story):
     print(story)
 
     embed_headline = story['headline']
-    embed_url = "https://www.bbc.co.uk"+story['url']
+    embed_url = "https://www.bbc.co.uk" + story['url']
 
     # check optional bits
     if 'summary' in story:
@@ -132,7 +141,8 @@ def do_discord_notification(story):
         embed_image = " "
 
     url = webhook_url
-    data = {"content": "They be dead!", "username": "Death Bot 3000", "embeds": []}
+
+    data = {"content": content, "username": username, "embeds": []}
 
     embed = {"description": embed_summary,
              "title": embed_headline,
@@ -150,7 +160,7 @@ def do_discord_notification(story):
     else:
         print("Notification delivered successfully, code {}.".format(result.status_code))
 
-    print("Done a discord notification:")
+    print("Done the discord notification:")
 
 
 def main():
@@ -161,8 +171,10 @@ def main():
         # chuck results in db
         if get_stories_list:
             update_stories_in_db(get_stories_list)
+        else:
+            print("No stories found.")
 
-        # loop delay, 5 mins
+        # loop delay
         print("Waiting for next run.")
         time.sleep(loop_timer)
 
