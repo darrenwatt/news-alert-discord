@@ -1,7 +1,7 @@
 Deathscraper
 ===
 
-Scrapes BBC News homepage searching for death, alerts in Discord. That's it.
+Scrapes BBC News homepage searching for search terms, alerts in Discord. That's it.
 
 The following vars need to be defined in .env file
 ```
@@ -13,10 +13,25 @@ db_pass = ""
 
 #discord stuff
 webhook_url = ""
+```
 
-notify = True/False (default True)
-loop_timer = integer (default 300)
-news_url = "https://www.bbc.co.uk/news/entertainment_and_arts" (default https://www.bbc.co.uk/news)
+And then some config stuff in config.ini
+```
+[general]
+notify = True
+loop_timer = 301
+
+# change this if you want a specific section
+news_url = https://www.bbc.co.uk/news/
+
+# from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
+imgwidth = 420
+
+searchterms = ["brexit","election"]
+
+# discord notification
+content = "This is news!"
+username = "Mainstream News Bot"
 ```
 
 Docker Image
