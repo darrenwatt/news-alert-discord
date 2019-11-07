@@ -1,4 +1,4 @@
-Deathscraper
+news-ping-discord
 ===
 
 Scrapes BBC News homepage searching for search terms, alerts in Discord. That's it.
@@ -37,34 +37,29 @@ username = "Mainstream News Bot"
 Docker Image
 ====
 
-https://cloud.docker.com/repository/docker/darrenwatt/deathscraper
+https://cloud.docker.com/repository/docker/darrenwatt/news-ping-discord
 
 To run locally:
 ```
-$ docker run -it --name deathscraper -v "$PWD/.env:/.env" darren/deathscraper
+$ docker run -it --name news-ping-discord -v "$PWD/.env:/.env" "$PWD/config.ini:/config.ini" darrenwatt/news-ping-discord:latest
 ```
 To run from docker-compose, in your docker-compose.yml
 ```
 services:
 
-  deathscraper:
+  news-ping-discord:
 
-    image: darrenwatt/deathscraper:latest
+    image: darrenwatt/news-ping-discord:latest
 
-    container_name: deathscraper
+    container_name: news-ping-discord
 
     volumes:
 
-     - ${USERDIR}/docker/deathscraper/.env:/.env
+     - ${USERDIR}/docker/news-ping-discord/.env:/.env
+     - ${USERDIR}/docker/news-ping-discord/config.ini:/config.ini
 ```
 Then run with:
 ```
 $ docker-compose -f ~/docker/docker-compose.yml up -d
 ```
 
-Running in Heroku notes (untested:
-```
-git push heroku master
-heroku ps:scale worker=1
-heroku logs --tail
-```
