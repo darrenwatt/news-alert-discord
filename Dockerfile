@@ -5,6 +5,6 @@ RUN pip install pymongo
 RUN pip install bs4
 RUN pip install python-dotenv
 
-ADD news-ping-discord.py /
+ADD news-alert-discord.py /
 
-CMD [ "python", "./news-ping-discord.py" ]
+CMD [ "python", "./news-alert-discord.py" ]

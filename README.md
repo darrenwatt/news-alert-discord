@@ -1,4 +1,4 @@
-news-ping-discord
+news-alert-discord
 ===
 
 Scrapes BBC News homepage searching for search terms, alerts in Discord. That's it.
@@ -37,26 +37,26 @@ username = "Mainstream News Bot"
 Docker Image
 ====
 
-https://cloud.docker.com/repository/docker/darrenwatt/news-ping-discord
+https://cloud.docker.com/repository/docker/darrenwatt/news-alert-discord
 
 To run locally:
 ```
-$ docker run -it --name news-ping-discord -v "$PWD/.env:/.env" "$PWD/config.ini:/config.ini" darrenwatt/news-ping-discord:latest
+$ docker run -it --name news-alert-discord -v "$PWD/.env:/.env" "$PWD/config.ini:/config.ini" darrenwatt/news-alert-discord:latest
 ```
 To run from docker-compose, in your docker-compose.yml
 ```
 services:
 
-  news-ping-discord:
+  news-alert-discord:
 
-    image: darrenwatt/news-ping-discord:latest
+    image: darrenwatt/news-alert-discord:latest
 
-    container_name: news-ping-discord
+    container_name: news-alert-discord
 
     volumes:
 
-     - ${USERDIR}/docker/news-ping-discord/.env:/.env
-     - ${USERDIR}/docker/news-ping-discord/config.ini:/config.ini
+     - ${USERDIR}/docker/news-alert-discord/.env:/.env
+     - ${USERDIR}/docker/news-alert-discord/config.ini:/config.ini
 ```
 Then run with:
 ```
