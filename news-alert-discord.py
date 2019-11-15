@@ -20,6 +20,7 @@ loop_timer = config.getint('general', 'loop_timer', fallback=300)
 news_url = config.get('general', 'news_url', fallback='https://www.bbc.co.uk/news')
 imgwidth = config.get('general', 'imgwidth', fallback="420")
 searchterms = json.loads(config.get('general', 'searchterms', fallback="boris"))
+specific_terms = bool(config.get('general', 'specific_terms', fallback=True))
 content = config.get('general', 'content', fallback="This is an update ...")
 username = config.get('general', 'username', fallback="News Update Bot")
 
@@ -73,31 +74,36 @@ def scrape_bbc_news():
         headline = story.find('h3')
         # print(headline.text.lower())
         for keyword in headline:
-            if reg.search(keyword):
-                print("match found")
-                story_dict['headline'] = headline.text
-                print(headline.text)
-                link = story.find('a')
-                if link:
-                    story_dict['url'] = link['href']
-                img = story.find('img')
-                if img:
-                    print(img)
-                    try:
-                        print(img['data-src'])
-                    except NameError:
-                        print("Variable data-src is not defined")
-                    except KeyError:
-                        print("probably want data instead")
-                        story_dict['img'] = img['src']
-                    else:
-                        story_dict['img'] = img['data-src'].replace("{width}", imgwidth)
-                summary = story.find('p')
-                if summary:
-                    story_dict['summary'] = summary.text
-                # Add the dict to our list
-                stories_list.append(story_dict)
-    return stories_list
+            if specific_terms:
+		    # do this if specific terms are set
+		    if reg.search(keyword):
+            else:
+                    # do this if specific terms are not set
+		    if any(i in keyword for i in headlines):
+			print("match found")
+			story_dict['headline'] = headline.text
+			print(headline.text)
+			link = story.find('a')
+			if link:
+			    story_dict['url'] = link['href']
+			img = story.find('img')
+			if img:
+			    print(img)
+			    try:
+				print(img['data-src'])
+			    except NameError:
+				print("Variable data-src is not defined")
+			    except KeyError:
+				print("probably want data instead")
+				story_dict['img'] = img['src']
+			    else:
+				story_dict['img'] = img['data-src'].replace("{width}", imgwidth)
+			summary = story.find('p')
+			if summary:
+			    story_dict['summary'] = summary.text
+			# Add the dict to our list
+			stories_list.append(story_dict)
+	    return stories_list
 
 
 def update_stories_in_db(stories_list):
