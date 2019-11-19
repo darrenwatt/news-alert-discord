@@ -28,7 +28,16 @@ database_name = config.get('general', 'database_name', fallback="stories")
 # import secret stuff, mongo config and discord webhook
 load_dotenv()
 
-reg = re.compile(r'(?i)\b(?:%s)\b' % '|'.join(searchterms))
+if searchspecific:
+    # match exact terms only
+    reg = re.compile(r'(?i)\b(?:%s)\b' % '|'.join(searchterms))
+else:
+    # match any partial term, this seems to work, I suck at regex so this might well be wrong
+    reg = re.compile(r'(?i)%s' % '|'.join(searchterms))
+
+print("regex output:")
+print(reg)
+
 
 # database stuff
 db_name = os.getenv("db_name")
