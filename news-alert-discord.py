@@ -20,8 +20,10 @@ loop_timer = config.getint('general', 'loop_timer', fallback=300)
 news_url = config.get('general', 'news_url', fallback='https://www.bbc.co.uk/news')
 imgwidth = config.get('general', 'imgwidth', fallback="420")
 searchterms = json.loads(config.get('general', 'searchterms', fallback="boris"))
+searchspecific = config.getboolean('general', 'searchspecific', fallback=True)
 content = config.get('general', 'content', fallback="This is an update ...")
 username = config.get('general', 'username', fallback="News Update Bot")
+database_name = config.get('general', 'database_name', fallback="stories")
 
 # import secret stuff, mongo config and discord webhook
 load_dotenv()
@@ -43,6 +45,8 @@ print("news_url is set to {}".format(news_url))
 print("imgwidth is set to {}".format(imgwidth))
 print("content is set to {}".format(content))
 print("username is set to {}".format(username))
+print("database_name is set to {}".format(database_name))
+print("searchspecific is set to {}".format(searchspecific))
 
 print("searchterms are:")
 print(*searchterms)
@@ -51,7 +55,7 @@ client = pymongo.MongoClient(db_host, db_port, retryWrites=False)
 database = client[db_name]
 database.authenticate(db_user, db_pass)
 
-stories_collection = database['stories']
+stories_collection = database[database_name]
 
 
 def scrape_bbc_news():
