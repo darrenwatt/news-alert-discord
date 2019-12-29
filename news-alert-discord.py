@@ -26,6 +26,7 @@ searchspecific = config.getboolean('general', 'searchspecific', fallback=True)
 content = config.get('general', 'content', fallback="This is an update ...")
 username = config.get('general', 'username', fallback="News Update Bot")
 database_name = config.get('general', 'database_name', fallback="stories")
+twitter_status_prefix = config.get('general', 'twitter_status_prefix', fallback="")
 
 # import secret stuff, mongo config and discord webhook
 load_dotenv()
@@ -168,7 +169,7 @@ def update_stories_in_db(stories_list):
 def do_twitter_notification(story):
     print("Doing a Twitter notification...")
     embed_url = "https://www.bbc.co.uk" + story['url']
-    api.update_status(status = story['headline']+ " " + embed_url)
+    api.update_status(status = twitter_status_prefix + story['headline']+ " " + embed_url)
 
 
 def do_discord_notification(story):
