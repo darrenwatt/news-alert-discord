@@ -169,7 +169,7 @@ def update_stories_in_db(stories_list):
 def do_twitter_notification(story):
     print("Doing a Twitter notification...")
     embed_url = "https://www.bbc.co.uk" + story['url']
-    api.update_status(status = twitter_status_prefix + story['headline']+ " " + embed_url)
+    api.update_status(status = twitter_status_prefix + " " + story['headline']+ " " + embed_url)
 
 
 def do_discord_notification(story):
