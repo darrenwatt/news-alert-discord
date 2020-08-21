@@ -1,10 +1,8 @@
 FROM python:3.6-alpine
 
-RUN pip install requests
-RUN pip install pymongo
-RUN pip install bs4
-RUN pip install python-dotenv
+COPY requirements.txt /
+COPY news-alert-discord.py /
 
-ADD news-alert-discord.py /
+RUN pip install -r requirements.txt
 
 CMD [ "python", "./news-alert-discord.py" ]
