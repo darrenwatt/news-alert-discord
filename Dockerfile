@@ -5,4 +5,4 @@ COPY news-alert-discord.py /
 
 RUN pip install -r requirements.txt
 
-CMD [ "python", "./news-alert-discord.py" ]
+CMD [ "python", "-u", "./news-alert-discord.py" ]
