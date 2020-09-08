@@ -6,10 +6,10 @@ Scrapes BBC News homepage searching for search terms, alerts in Discord. That's 
 The following vars need to be defined in .env file
 ```
 # database connection string for Atlas
-db_string = "mongodb+srv://username:passsword@mydb.r46Gd.mongodb.net/mycluster?retryWrites=true&w=majority"
+db_string = "mongodb+srv://username:passsword@mongo-url/mycluster?retryWrites=true&w=majority"
 
 # discord webhook URL
-webhook_url = "https://discordapp.com/api/webhooks/98534785628347523640575465/G76IWCyhlLxTXt75TkLBbd8RlwZ_ou7C_vn4YG9M0xns5gKQX-Lu7_cUP2BUeFJEIz"
+webhook_url = "https://discordapp.com/api/webhooks/server-string/blah"
 ```
 
 And then some config stuff in config.ini
