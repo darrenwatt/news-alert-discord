@@ -4,7 +4,7 @@ certifi==2019.9.11
 chardet==3.0.4
 idna==2.8
 multidict==4.5.2
-pymongo[tls]
+pymongo
 python-dotenv==0.10.3
 requests==2.22.0
 soupsieve==1.9.4
