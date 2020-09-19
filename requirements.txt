@@ -4,7 +4,7 @@ certifi==2019.9.11
 chardet==3.0.4
 idna==2.8
 multidict==4.5.2
-pymongo==3.9.0
+pymongo
 python-dotenv==0.10.3
 requests==2.22.0
 soupsieve==1.9.4
@@ -12,3 +12,4 @@ urllib3==1.25.6
 websockets==6.0
 yarl==1.3.0
 tweepy
+dnspython

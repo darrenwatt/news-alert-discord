@@ -42,13 +42,8 @@ print("regex output:")
 print(reg)
 
 
-# database stuff
-db_name = os.getenv("db_name")
-db_host = os.getenv("db_host")
-db_port = int(os.getenv("db_port"))
-db_user = os.getenv("db_user")
-db_pass = os.getenv("db_pass")
-
+# import secret stuff
+db_string = os.getenv("db_string")
 webhook_url = os.getenv("webhook_url")
 
 
@@ -89,9 +84,9 @@ print("searchspecific is set to {}".format(searchspecific))
 print("searchterms are:")
 print(*searchterms)
 
-client = pymongo.MongoClient(db_host, db_port, retryWrites=False)
-database = client[db_name]
-database.authenticate(db_user, db_pass)
+
+client = pymongo.MongoClient(db_string)
+database = client[database_name]
 
 stories_collection = database[database_name]
 

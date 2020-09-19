@@ -5,21 +5,18 @@ Scrapes BBC News homepage searching for search terms, alerts in Discord. That's 
 
 The following vars need to be defined in .env file
 ```
-db_name = ""
-db_host = ""
-db_port = integer
-db_user = ""
-db_pass = ""
+# database connection string for Atlas
+db_string = "mongodb+srv://username:passsword@mongo-url/mycluster?retryWrites=true&w=majority"
 
-#discord stuff
-webhook_url = ""
+# discord webhook URL
+webhook_url = "https://discordapp.com/api/webhooks/server-string/blah"
 ```
 
 And then some config stuff in config.ini
 ```
 [general]
-notify = True
-loop_timer = 301
+notify = True # set False to turn off discord notifications
+loop_timer = 301 # how may seconds to re-run the fun
 
 # change this if you want a specific section
 news_url = https://www.bbc.co.uk/news/
@@ -32,6 +29,9 @@ searchterms = ["brexit","election"]
 # discord notification
 content = "This is news!"
 username = "Mainstream News Bot"
+
+# database name, defaults to "stories"
+database_name = stories
 ```
 
 Docker Image
