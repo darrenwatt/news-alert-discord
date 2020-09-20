@@ -7,6 +7,7 @@ import json
 import re
 import os
 from configparser import ConfigParser
+import tweepy
 
 msg = "Yoyoyo, starting up in the house!"
 print(msg)
@@ -16,6 +17,7 @@ print(config.read('config.ini'))
 
 print("Loading configuration")
 notify = config.getboolean('general', 'notify', fallback=False)
+notify_twitter = config.getboolean('general', 'twitter_notify', fallback=False)
 loop_timer = config.getint('general', 'loop_timer', fallback=300)
 news_url = config.get('general', 'news_url', fallback='https://www.bbc.co.uk/news')
 imgwidth = config.get('general', 'imgwidth', fallback="420")
@@ -24,6 +26,7 @@ searchspecific = config.getboolean('general', 'searchspecific', fallback=True)
 content = config.get('general', 'content', fallback="This is an update ...")
 username = config.get('general', 'username', fallback="News Update Bot")
 database_name = config.get('general', 'database_name', fallback="stories")
+twitter_status_prefix = config.get('general', 'twitter_status_prefix', fallback="")
 
 # import secret stuff, mongo config and discord webhook
 load_dotenv()
@@ -42,6 +45,32 @@ print(reg)
 # import secret stuff
 db_string = os.getenv("db_string")
 webhook_url = os.getenv("webhook_url")
+
+
+# twitter import
+
+consumer_key = os.getenv("twitter_key")
+consumer_secret = os.getenv("twitter_secret")
+access_token = os.getenv("twitter_token")
+access_token_secret = os.getenv("twitter_token_secret")
+
+# twitter auth
+
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+
+api = tweepy.API(auth)
+try:
+    api.verify_credentials()
+    print("Authentication OK")
+except:
+    print("Error during authentication")
+
+
+if notify_twitter:
+    print("Tweeting is enabled")
+else:
+    print("Tweeting is disabled")
 
 print("notify is set to {}".format(notify))
 print("loop_timer is set to {}".format(loop_timer))
@@ -126,8 +155,16 @@ def update_stories_in_db(stories_list):
             if insert_result.acknowledged:
                 if notify:
                     do_discord_notification(story)
+                if notify_twitter:
+                    do_twitter_notification(story)
         else:
             print("Story already in DB.")
+
+
+def do_twitter_notification(story):
+    print("Doing a Twitter notification...")
+    embed_url = "https://www.bbc.co.uk" + story['url']
+    api.update_status(status = twitter_status_prefix + " " + story['headline']+ " " + embed_url)
 
 
 def do_discord_notification(story):
