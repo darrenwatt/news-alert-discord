@@ -1,7 +1,0 @@
-# update and rename this file to .env
-
-# database
-db_string = "mongodb+srv://username:passsword@mydb.r46Gd.mongodb.net/mycluster?retryWrites=true&w=majority"
-
-# discord stuff
-webhook_url = "https://discordapp.com/api/webhooks/985347856239875465/G76IWCyhlLxTXt75TkLBbd8RlwZ_ou7C_vn4YG9M0xns5gKQX-Lu7_cUP2BUeFJEIz"
