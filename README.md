@@ -1,7 +1,7 @@
 news-alert-discord
 ===
 
-Scrapes BBC News homepage searching for search terms, alerts in Discord. That's it.
+Scrapes BBC News homepage searching for search terms, alerts in Discord or to Twitter. That's it.
 
 The following vars need to be defined in .env file
 ```
