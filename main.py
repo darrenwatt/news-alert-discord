@@ -1,3 +1,4 @@
+from ast import keyword
 from config import Config
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
@@ -14,14 +15,15 @@ collection = db[Config.MONGO_COLLECTION]
 logging.info("Database is: " + Config.MONGO_DB)
 logging.info("Collection is: " + Config.MONGO_COLLECTION)
 
-
+# string to list
+keywords=Config.KEYWORDS.split()
 
 if Config.SEARCHSPECIFIC:
     # match exact terms only
-    reg = re.compile(r'(?i)\b(?:%s)\b' % '|'.join(Config.KEYWORDS))
+    reg = re.compile(r'(?i)\b(?:%s)\b' % '|'.join(keywords))
 else:
     # match any partial term, this seems to work, I suck at regex so this might well be wrong
-    reg = re.compile(r'(?i)%s' % '|'.join(Config.KEYWORDS))
+    reg = re.compile(r'(?i)%s' % '|'.join(keywords))
 
 logging.info("regex output:")
 logging.info(reg)
@@ -60,32 +62,31 @@ def scrape_bbc_news():
     for story in stories:
         # Create a dictionary without anything in it
         story_dict = {}
-        headline = story.find('h3')
-        for keyword in headline:
-            if reg.search(keyword):
-                logging.info("match found")
-                story_dict['headline'] = headline.text
-                logging.info(headline.text)
-                link = story.find('a')
-                if link:
-                    story_dict['url'] = link['href']
-                img = story.find('img')
-                if img:
-                    logging.info(img)
-                    try:
-                        logging.info(img['data-src'])
-                    except NameError:
-                        logging.info("Variable data-src is not defined")
-                    except KeyError:
-                        logging.info("probably want data instead")
-                        story_dict['img'] = img['src']
-                    else:
-                        story_dict['img'] = img['data-src'].replace("{width}", Config.IMGWIDTH)
-                summary = story.find('p')
-                if summary:
-                    story_dict['summary'] = summary.text
-                # Add the dict to our list
-                stories_list.append(story_dict)
+        headline = story.find('h3').text
+        if reg.search(headline):
+            logging.info("match found")
+            story_dict['headline'] = headline
+            logging.info(headline)
+            link = story.find('a')
+            if link:
+                story_dict['url'] = link['href']
+            img = story.find('img')
+            if img:
+                logging.info(img)
+                try:
+                    logging.info(img['data-src'])
+                except NameError:
+                    logging.info("Variable data-src is not defined")
+                except KeyError:
+                    logging.info("probably want data instead")
+                    story_dict['img'] = img['src']
+                else:
+                    story_dict['img'] = img['data-src'].replace("{width}", Config.IMGWIDTH)
+            summary = story.find('p')
+            if summary:
+                story_dict['summary'] = summary.text
+            # Add the dict to our list
+            stories_list.append(story_dict)
     return stories_list
 
 

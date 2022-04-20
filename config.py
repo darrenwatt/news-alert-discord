@@ -12,7 +12,7 @@ class Config(object):
 
     SOURCE_URL = os.getenv("SOURCE_URL") or "https://www.bbc.co.uk/news"
     IMGWIDTH = os.getenv("IMGWIDTH") or 420 # from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
-    KEYWORDS =  os.getenv("KEYWORDS") or "Boris"
+    KEYWORDS =  os.getenv("KEYWORDS") or "Boris" # supply as string with spaces
     SEARCHSPECIFIC = os.getenv("SEARCHSPECIFIC") or 'False'
 
     # Discord - off by default
