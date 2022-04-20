@@ -17,7 +17,7 @@ class Config(object):
 
     # Discord - off by default
     DISCORD_NOTIFY = os.getenv("DISCORD_NOTIFY") or 'False'
-    DISCORD_CONTENT = os.getenv("TWITTER_CONTENT") or "Mainstream News!"
+    DISCORD_CONTENT = os.getenv("DISCORD_CONTENT") or "Mainstream News!"
     DISCORD_USERNAME = os.getenv("DISCORD_USERNAME") or "News Bot"
     DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL") or "None"
     MONGO_DBSTRING = os.getenv("MONGO_DBSTRING") or "None"
