@@ -18,7 +18,7 @@ logging.info("Collection is: " + Config.MONGO_COLLECTION)
 # string to list
 keywords=Config.KEYWORDS.split()
 
-if Config.SEARCHSPECIFIC:
+if Config.SEARCHSPECIFIC == 'True':
     # match exact terms only
     reg = re.compile(r'(?i)\b(?:%s)\b' % '|'.join(keywords))
 else:
