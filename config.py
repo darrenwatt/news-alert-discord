@@ -22,7 +22,7 @@ class Config(object):
     DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL") or "None"
     MONGO_DBSTRING = os.getenv("MONGO_DBSTRING") or "None"
     MONGO_DB = os.getenv("MONGO_DB") or "mongo001"
-    MONGO_COLLECTION = os.getenv("MONGO_DB") or "mongo_test_collection"
+    MONGO_COLLECTION = os.getenv("MONGO_COLLECTION") or "mongo_test_collection"
 
     # Twitter - off by default
     TWITTER_NOTIFY = os.getenv("TWITTER_NOTIFY") or 'False'

@@ -1,22 +1,18 @@
-import requests
-import time
-import pymongo
-from bs4 import BeautifulSoup
-import json
-import re
-import os
-import tweepy
 from config import Config
-import logging
+from pymongo import MongoClient
+from bs4 import BeautifulSoup
+import requests, time, json, re, tweepy, logging
 
 Config = Config()
 logging.basicConfig(format=Config.LOG_FORMAT ,level=Config.LOG_LEVEL)
 logging.info("Yoyoyo, starting up in the house!")
 
 logging.info("Setting up connection to mongodb at: "+Config.MONGO_DBSTRING)
-mongoclient = pymongo.MongoClient(Config.MONGO_DBSTRING)
-database = mongoclient[Config.MONGO_DB]
-stories_collection = database[Config.MONGO_COLLECTION]
+mongoclient = MongoClient(Config.MONGO_DBSTRING)
+db = mongoclient[Config.MONGO_DB]
+collection = db[Config.MONGO_COLLECTION]
+logging.info("Database is: " + Config.MONGO_DB)
+logging.info("Collection is: " + Config.MONGO_COLLECTION)
 
 
 
@@ -104,11 +100,11 @@ def update_stories_in_db(stories_list):
 
         # check for url to remove reposts
         url = story['url']
-        already_there_url = stories_collection.count_documents({"url": url})
+        already_there_url = collection.count_documents({"url": url})
         if already_there_url == 0:
-            print("Adding story to database collection")
+            print("Adding story to db collection")
             story['timestamp'] = time.time()
-            insert_result = stories_collection.insert_one(story)
+            insert_result = collection.insert_one(story)
             if insert_result.acknowledged:
                 if Config.DISCORD_NOTIFY == 'True':
                     do_discord_notification(story)
