@@ -63,10 +63,10 @@ def scrape_bbc_news():
         # Create a dictionary without anything in it
         story_dict = {}
         headline = story.find('h3').text
+        logging.info("Checking headline: " + headline)
         if reg.search(headline):
-            logging.info("match found")
+            logging.info("Match found")
             story_dict['headline'] = headline
-            logging.info(headline)
             link = story.find('a')
             if link:
                 story_dict['url'] = link['href']
@@ -87,6 +87,8 @@ def scrape_bbc_news():
                 story_dict['summary'] = summary.text
             # Add the dict to our list
             stories_list.append(story_dict)
+        else:
+            logging.info("No match found")
     return stories_list
 
 
