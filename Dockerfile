@@ -1,7 +1,7 @@
 FROM python:3.6-alpine
 
 COPY requirements.txt /
-COPY news-alert-discord.py /
+COPY main.py /
 
 RUN pip install -r requirements.txt
 
