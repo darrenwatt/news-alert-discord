@@ -45,12 +45,12 @@ else:
 
 
 def scrape_bbc_news():
-    print("Getting stories now.")
+    logging.info("Getting stories now.")
     try:
         response = requests.get(Config.SOURCE_URL)
     except requests.exceptions.RequestException as e:
-        print(e)
-        print("Failed. Never mind... we'll try again in a bit.")
+        logging.info(e)
+        logging.info("Failed. Never mind... we'll try again in a bit.")
         return
     doc = BeautifulSoup(response.text, 'html.parser')
 
@@ -61,7 +61,6 @@ def scrape_bbc_news():
         # Create a dictionary without anything in it
         story_dict = {}
         headline = story.find('h3')
-        # print(headline.text.lower())
         for keyword in headline:
             if reg.search(keyword):
                 logging.info("match found")
@@ -94,15 +93,15 @@ def update_stories_in_db(stories_list):
     logging.info('Updating stories in db, if required ...')
 
     for story in stories_list:
-        # print("working on story: ")
-        # print(story)
-        # print("checking if already reported")
+        logging.debug("working on story: ")
+        logging.debug(story)
+        logging.debug("checking if already reported")
 
         # check for url to remove reposts
         url = story['url']
         already_there_url = collection.count_documents({"url": url})
         if already_there_url == 0:
-            print("Adding story to db collection")
+            logging.info("Adding story to db collection")
             story['timestamp'] = time.time()
             insert_result = collection.insert_one(story)
             if insert_result.acknowledged:
