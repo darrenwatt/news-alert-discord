@@ -31,3 +31,4 @@ class Config(object):
     TWITTER_CONSUMER_SECRET = os.getenv("TWITTER_CONSUMER_SECRET") or 'False'
     TWITTER_ACCESS_TOKEN = os.getenv("TWITTER_ACCESS_TOKEN") or 'False'
     TWITTER_ACCESS_TOKEN_SECRET = os.getenv("TWITTER_ACCESS_TOKEN_SECRET") or 'False'
+    TWITTER_BEARER_TOKEN = os.getenv("TWITTER_BEARER_TOKEN") or 'False'

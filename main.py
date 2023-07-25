@@ -32,15 +32,11 @@ logging.info(reg)
 if Config.TWITTER_NOTIFY == 'True':
     logging.info("Tweeting is enabled")
     # twitter auth
-    auth = tweepy.OAuthHandler(Config.TWITTER_CONSUMER_KEY, Config.TWITTER_CONSUMER_SECRET)
-    auth.set_access_token(Config.TWITTER_ACCESS_TOKEN, Config.TWITTER_ACCESS_TOKEN_SECRET)
+    # auth = tweepy.OAuthHandler(Config.TWITTER_CONSUMER_KEY, Config.TWITTER_CONSUMER_SECRET)
+    # auth.set_access_token(Config.TWITTER_ACCESS_TOKEN, Config.TWITTER_ACCESS_TOKEN_SECRET)
 
-    api = tweepy.API(auth)
-    try:
-        api.verify_credentials()
-        logging.info("Authentication OK")
-    except:
-        logging.info("Error during authentication")
+    # v2 Twitter API
+    client = tweepy.Client(bearer_token=Config.TWITTER_BEARER_TOKEN)
 else:
     logging.info("Tweeting is disabled")
 
@@ -119,7 +115,8 @@ def update_stories_in_db(stories_list):
 def do_twitter_notification(story):
     logging.info("Doing a Twitter notification...")
     embed_url = "https://www.bbc.co.uk" + story['url']
-    api.update_status(status = Config.TWITTER_STATUS_PREFIX + " " + story['headline']+ " " + embed_url)
+    #api.update_status(status = Config.TWITTER_STATUS_PREFIX + " " + story['headline']+ "  " + embed_url)
+    client.create_tweet(text=Config.TWITTER_STATUS_PREFIX + " " + story['headline']+ "  " + embed_url)
 
 
 def do_discord_notification(story):
