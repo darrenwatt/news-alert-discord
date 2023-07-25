@@ -31,15 +31,19 @@ logging.info(reg)
 
 if Config.TWITTER_NOTIFY == 'True':
     logging.info("Tweeting is enabled")
-    # twitter auth
-    # auth = tweepy.OAuthHandler(Config.TWITTER_CONSUMER_KEY, Config.TWITTER_CONSUMER_SECRET)
-    # auth.set_access_token(Config.TWITTER_ACCESS_TOKEN, Config.TWITTER_ACCESS_TOKEN_SECRET)
 
-    # v2 Twitter API
-    client = tweepy.Client(bearer_token=Config.TWITTER_BEARER_TOKEN)
+    twitter_consumer_key = Config.TWITTER_CONSUMER_KEY
+    twitter_consumer_secret = Config.TWITTER_CONSUMER_SECRET
+    twitter_access_token = Config.TWITTER_ACCESS_TOKEN
+    twitter_access_token_secret = Config.TWITTER_ACCESS_TOKEN_SECRET
+
+    client = tweepy.Client(
+    consumer_key=twitter_consumer_key, consumer_secret=twitter_consumer_secret,
+    access_token=twitter_access_token, access_token_secret=twitter_access_token_secret
+    )
+
 else:
     logging.info("Tweeting is disabled")
-
 
 
 def scrape_bbc_news():
@@ -109,14 +113,17 @@ def update_stories_in_db(stories_list):
                 if Config.TWITTER_NOTIFY == 'True':
                     do_twitter_notification(story)
         else:
-            logging.info("Story already in DB.")
+            logging.info("Story already in DB ... " + url )
 
 
 def do_twitter_notification(story):
     logging.info("Doing a Twitter notification...")
     embed_url = "https://www.bbc.co.uk" + story['url']
-    #api.update_status(status = Config.TWITTER_STATUS_PREFIX + " " + story['headline']+ "  " + embed_url)
-    client.create_tweet(text=Config.TWITTER_STATUS_PREFIX + " " + story['headline']+ "  " + embed_url)
+    response = client.create_tweet(
+            text=Config.TWITTER_STATUS_PREFIX + " " + story['headline']+ "  " + embed_url
+            )
+    print(f"https://twitter.com/user/status/{response.data['id']}")
+    logging.info("Twitter notification complete.")
 
 
 def do_discord_notification(story):
