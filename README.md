@@ -11,28 +11,8 @@ db_string = "MONGO-ATLAS-CONNECTION-STRING"
 # discord webhook URL
 webhook_url = "DISCORD-WEBHOOK-URL"
 ```
+For the rest of the available config values, see config.py
 
-And then some config stuff in config.ini
-```
-[general]
-notify = True # set False to turn off discord notifications
-loop_timer = 301 # how may seconds to re-run the fun
-
-# change this if you want a specific section
-news_url = https://www.bbc.co.uk/news/
-
-# from bbc site, datawidths = "[240,380,420,490,573,743,820]", pick one
-imgwidth = 420
-
-searchterms = ["brexit","election"]
-
-# discord notification
-content = "This is news!"
-username = "Mainstream News Bot"
-
-# database name, defaults to "stories"
-database_name = stories
-```
 
 Docker Image
 ====
@@ -41,7 +21,7 @@ https://cloud.docker.com/repository/docker/darrenwatt/news-alert-discord
 
 To run locally:
 ```
-$ docker run -it --name news-alert-discord -v "$PWD/.env:/.env" "$PWD/config.ini:/config.ini" darrenwatt/news-alert-discord:latest
+$ docker run -it --name news-alert-discord -v "$PWD/.env:/.env" darrenwatt/news-alert-discord:latest
 ```
 To run from docker-compose, in your docker-compose.yml
 ```
@@ -56,7 +36,7 @@ services:
     volumes:
 
      - ${USERDIR}/docker/news-alert-discord/.env:/.env
-     - ${USERDIR}/docker/news-alert-discord/config.ini:/config.ini
+
 ```
 Then run with:
 ```
