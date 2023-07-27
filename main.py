@@ -123,7 +123,9 @@ def do_twitter_notification(story):
             text=Config.TWITTER_STATUS_PREFIX + " " + story['headline']+ "  " + embed_url
             )
     print(f"https://twitter.com/user/status/{response.data['id']}")
+    print(f"https://twitter.com/user/status/{response.data['id']}")
     logging.info("Twitter notification complete.")
+    logging.info("Tweeted: " + story['headline'])
 
 
 def do_discord_notification(story):
