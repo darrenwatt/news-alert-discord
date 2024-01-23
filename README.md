@@ -1,6 +1,13 @@
 news-alert-discord
 ===
 
+Note: development on this version has stopped, I'm doing stuff in https://github.com/darrenwatt/xml-to-discord-post which is the same but just scraping XML feeds.
+The problem with this version is BBC News keep changing their CSS which means continuous changes to the code to keep scraping working.
+XML doesn't have this problem.
+
+About
+===
+
 Scrapes BBC News homepage searching for search terms, alerts in Discord or to Twitter. That's it.
 
 The following vars need to be defined in .env file
